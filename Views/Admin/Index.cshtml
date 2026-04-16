@@ -1,0 +1,75 @@
+@model IEnumerable<PortfolioApp.Models.Project>
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="admin-header">
+        <div>
+            <h1 class="admin-title">لوحة التحكم</h1>
+            <p class="admin-subtitle">إدارة مشاريع الـ Portfolio</p>
+        </div>
+        <a href="/Admin/Create" class="btn-primary">+ إضافة مشروع</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">◈</div>
+            <p>لا توجد مشاريع بعد. ابدأ بإضافة مشروعك الأول!</p>
+            <a href="/Admin/Create" class="btn-primary" style="margin-top:1rem">إضافة أول مشروع</a>
+        </div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الصورة</th>
+                        <th>اسم المشروع</th>
+                        <th>الوصف</th>
+                        <th>التاريخ</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
+                    {
+                        <tr>
+                            <td class="td-id">@project.Id</td>
+                            <td class="td-img">
+                                @if (!string.IsNullOrEmpty(project.ImagePath))
+                                {
+                                    <img src="@project.ImagePath" alt="@project.Title" class="table-img" />
+                                }
+                                else
+                                {
+                                    <div class="table-img-placeholder">◈</div>
+                                }
+                            </td>
+                            <td class="td-title">@project.Title</td>
+                            <td class="td-desc">
+                                @(project.Description.Length > 80
+                                    ? project.Description.Substring(0, 80) + "..."
+                                    : project.Description)
+                            </td>
+                            <td class="td-date">@project.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            <td class="td-actions">
+                                <a href="/Admin/Edit/@project.Id" class="btn-edit">تعديل</a>
+                                <form asp-action="Delete" asp-route-id="@project.Id" method="post"
+                                      onsubmit="return confirm('هل أنت متأكد من حذف هذا المشروع؟');"
+                                      style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-delete">حذف</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

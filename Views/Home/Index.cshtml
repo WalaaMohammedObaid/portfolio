@@ -1,0 +1,62 @@
+@model IEnumerable<PortfolioApp.Models.Project>
+@{
+    ViewData["Title"] = "Portfolio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="hero">
+    <div class="hero-content">
+        <p class="hero-greeting">مرحباً، أنا</p>
+        <h1 class="hero-title">مطوّر ويب</h1>
+        <p class="hero-subtitle">هذه مجموعة من أبرز مشاريعي وأعمالي</p>
+        <div class="hero-line"></div>
+    </div>
+    <div class="hero-decoration">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+        <div class="circle c3"></div>
+    </div>
+</div>
+
+<section class="projects-section">
+    <div class="section-header">
+        <h2 class="section-title">المشاريع</h2>
+        <span class="section-count">@Model.Count() مشروع</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-icon">◈</div>
+            <p>لا توجد مشاريع بعد</p>
+        </div>
+    }
+    else
+    {
+        <div class="projects-grid">
+            @foreach (var project in Model)
+            {
+                <div class="project-card">
+                    <div class="card-image-wrap">
+                        @if (!string.IsNullOrEmpty(project.ImagePath))
+                        {
+                            <img src="@project.ImagePath" alt="@project.Title" class="card-image" />
+                        }
+                        else
+                        {
+                            <div class="card-image-placeholder">
+                                <span>◈</span>
+                            </div>
+                        }
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">@project.Title</h3>
+                        <p class="card-desc">@project.Description</p>
+                        <span class="card-date">@project.CreatedAt.ToString("MMM yyyy")</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

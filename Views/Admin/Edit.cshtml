@@ -1,0 +1,82 @@
+@model PortfolioApp.Models.Project
+@{
+    ViewData["Title"] = "تعديل مشروع";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form-page">
+    <div class="form-card">
+        <div class="form-card-header">
+            <a href="/Admin" class="back-link">← رجوع</a>
+            <h1>تعديل المشروع</h1>
+        </div>
+
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post"
+              enctype="multipart/form-data" class="project-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="validation-error"></div>
+
+            <div class="form-group">
+                <label asp-for="Title">اسم المشروع</label>
+                <input asp-for="Title" class="form-input" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">وصف المشروع</label>
+                <textarea asp-for="Description" class="form-textarea" rows="4"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label>صورة المشروع</label>
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="current-image-wrap">
+                        <p class="current-image-label">الصورة الحالية:</p>
+                        <img src="@Model.ImagePath" alt="@Model.Title" class="current-image" id="imagePreview" />
+                    </div>
+                }
+                else
+                {
+                    <img id="imagePreview" class="image-preview" style="display:none" />
+                }
+
+                <div class="file-upload-area" style="margin-top:0.75rem">
+                    <input type="file" name="imageFile" id="imageFile" accept="image/*"
+                           class="file-input" onchange="previewImage(this)" />
+                    <div class="file-upload-label" id="uploadLabel">
+                        <span class="upload-icon">📁</span>
+                        <span>اختر صورة جديدة (اختياري)</span>
+                        <span class="upload-hint">PNG, JPG, WEBP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">حفظ التعديلات</button>
+                <a href="/Admin" class="btn-secondary">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const preview = document.getElementById('imagePreview');
+            const label = document.getElementById('uploadLabel');
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            label.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+}

@@ -1,0 +1,36 @@
+@model PortfolioApp.Models.LoginViewModel
+@{
+    ViewData["Title"] = "تسجيل الدخول";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-icon">◈</div>
+            <h1>لوحة التحكم</h1>
+            <p>سجّل دخولك للمتابعة</p>
+        </div>
+
+        <form asp-action="Login" method="post" class="auth-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+            <div asp-validation-summary="ModelOnly" class="validation-error"></div>
+
+            <div class="form-group">
+                <label asp-for="Username">اسم المستخدم</label>
+                <input asp-for="Username" class="form-input" placeholder="admin" autocomplete="username" />
+                <span asp-validation-for="Username" class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">كلمة المرور</label>
+                <input asp-for="Password" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+
+            <button type="submit" class="btn-primary">دخول</button>
+        </form>
+    </div>
+</div>

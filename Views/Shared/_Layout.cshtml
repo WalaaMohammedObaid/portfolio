@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="brand-icon">◈</span>
+                Portfolio
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">الرئيسية</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Admin" class="nav-link">لوحة التحكم</a>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-logout">تسجيل الخروج</button>
+                    </form>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="nav-link admin-link">دخول الأدمن</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert-success">
+                <span>✓</span> @TempData["Success"]
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <p>© @DateTime.Now.Year — My Portfolio</p>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
